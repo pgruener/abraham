@@ -25,14 +25,14 @@
   tour.addStep({
     id: 'step-<%= key %>',
     <% if step.key?('title') %>
-    title: "<%= step['title'] %>",
+    title: "<%= step['title'].gsub(/"/, '\\"').html_safe %>",
     <% end %>
-    text: "<%= step['text'] %>",
+    text: "<%= step['text'].gsub(/\r?\n/, '\\n').gsub(/"/, '\\"').html_safe %>",
     <% if step.key?('attachTo') %>
-    attachTo: { element: "<%= step['attachTo']['element'] %>", on: "<%= step['attachTo']['placement'] %>" },
+    attachTo: { element: "<%= step['attachTo']['element'].gsub(/"/, '\\"').html_safe %>", on: "<%= step['attachTo']['placement'] %>" },
     showOn: function() {
       // Only display this step if its selector is present
-      return document.querySelector("<%= step['attachTo']['element'] %>") ? true : false
+      return document.querySelector("<%= step['attachTo']['element'].gsub(/"/, '\\"').html_safe %>") ? true : false
     },
     <% end %>
     buttons: [
@@ -57,7 +57,7 @@
       var tourMayStart = !Cookies.get('<%= abraham_cookie_prefix %>-<%= tour_name %>', {domain: '<%= abraham_domain %>'});
       <% if steps.first[1]['attachTo'] %>
       // Don't start the tour if the first step's element is missing
-      tourMayStart = tourMayStart && document.querySelector("<%= steps.first[1]['attachTo']['element'] %>");
+      tourMayStart = tourMayStart && document.querySelector("<%= steps.first[1]['attachTo']['element'].gsub(/"/, '\\"').html_safe %>");
       <% end %>
       
       if (tourMayStart) {
